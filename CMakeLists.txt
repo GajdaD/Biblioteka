@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.14)
+cmake_policy(SET CMP0135 NEW)
 project(Biblioteka)
 
 # Ustawienie standardu C++
@@ -13,11 +14,31 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googletest)
 
 # Cel 1: Główna aplikacja
-add_executable(BibliotekaApp src/main.cpp)
+add_executable(BibliotekaApp 
+    src/main.cpp 
+    src/Autor.cpp 
+    src/Ksiazka.cpp 
+    src/Czytelnik.cpp 
+    src/Bibliotekarz.cpp 
+    src/Egzemplarz.cpp 
+    src/Ocena.cpp 
+    src/Rezerwacja.cpp 
+    src/Wypozyczenie.cpp
+)
 
 # Cel 2: Testy jednostkowe
 enable_testing()
-add_executable(BibliotekaTests tests/dummy_test.cpp)
+add_executable(BibliotekaTests 
+    tests/test_autor.cpp
+    src/Autor.cpp
+    src/Ksiazka.cpp
+    src/Czytelnik.cpp
+    src/Bibliotekarz.cpp
+    src/Egzemplarz.cpp
+    src/Ocena.cpp
+    src/Rezerwacja.cpp
+    src/Wypozyczenie.cpp
+)
 # Linkowanie biblioteki testowej
 target_link_libraries(BibliotekaTests gtest_main)
 

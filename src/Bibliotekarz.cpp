@@ -1,20 +1,9 @@
-// Bibliotekarz.cpp
 #include "Bibliotekarz.h"
-#include "Czytelnik.h"
-#include <iostream>
-
-void Bibliotekarz::rejestrujCzytelnika(std::string imie, std::string nazwisko, std::string mail, std::string haslo, int limit) {
-    // Symulacja sprawdzenia w bazie, czy dany adres e-mail już istnieje
-    bool czyIstniejeWBazie = false; 
-
-    if (!czyIstniejeWBazie) { // Blok [czytelnik nie istnieje]
-        // <<create>> Wywołanie konstruktora z diagramu klas
-        Czytelnik nowyCzytelnik(imie, nazwisko, mail); 
-        
-        // Symulacja wiadomości powrotnej: potwierdzenieRejestracji()
-        std::cout << "Zarejestrowano nowego czytelnika: " << mail << std::endl;
-    } else { // Blok [czytelnik juz istnieje]
-        // Symulacja wiadomości powrotnej: odmowaRejestracji()
-        std::cout << "Odmowa: Czytelnik z tym adresem e-mail juz istnieje!" << std::endl;
-    }
-}
+Bibliotekarz::Bibliotekarz(std::string imie, std::string nazwisko, int stanowisko) : imie(imie), nazwisko(nazwisko), stanowisko(stanowisko) {}
+void Bibliotekarz::rejestrujCzytelnika(std::string imie, std::string nazwisko, std::string mail, std::string haslo, int limit) {}
+void Bibliotekarz::dodajAutora(std::string imie, std::string nazwisko) {}
+std::vector<Autor*> Bibliotekarz::wyszukajAutora(std::string imie, std::string nazwisko) { return {}; }
+std::string Bibliotekarz::getImie() { return imie; }
+std::string Bibliotekarz::getNazwisko() { return nazwisko; }
+int Bibliotekarz::getStanowisko() { return stanowisko; }
+std::string Bibliotekarz::getHaslo() { return haslo; }
