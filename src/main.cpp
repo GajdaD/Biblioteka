@@ -42,17 +42,18 @@ int main() {
         cout << "Wybor: ";
         rola = wczytajLiczbe(); // Uzycie bezpiecznej funkcji!
 
-        if (rola == 1) {
+    if (rola == 1) {
             int opcjaBib = -1;
             while (opcjaBib != 0) {
                 cout << "\n--- MENU BIBLIOTEKARZA ---\n";
                 cout << "1. Zarejestruj nowego czytelnika\n";
-                cout << "2. Zarejestruj nowego autora\n";
-                cout << "3. Wyszukaj ksiazke\n";
-                cout << "4. Przyjmij zwrot ksiazki\n";
+                cout << "2. Zarejestruj nowa ksiazke (wymaga istniejacego autora)\n";
+                cout << "3. Dodaj nowego autora do systemu\n";
+                cout << "4. Wyszukaj ksiazke\n";
+                cout << "5. Przyjmij zwrot ksiazki\n";
                 cout << "0. Wyloguj (Powrot do glownego menu)\n";
                 cout << "Wybierz akcje: ";
-                opcjaBib = wczytajLiczbe(); // Uzycie bezpiecznej funkcji!
+                opcjaBib = wczytajLiczbe();
 
                 if (opcjaBib == 1) {
                     string im, naz, mail;
@@ -63,14 +64,35 @@ int main() {
                     admin.rejestrujCzytelnika(im, naz, mail, "haslo123", 3);
                 } 
                 else if (opcjaBib == 2) {
+                    // IMPLEMENTACJA ZGODNA Z DIAGRAMEM SEKWENCJI: "rejestracja nowej ksiazki"
+                    cout << "\n[Rejestracja Ksiazki] Najpierw musimy znalezc autora.\n";
+                    string imA, nazA;
+                    cout << "Podaj imie autora: "; cin >> imA;
+                    cout << "Podaj nazwisko autora: "; cin >> nazA;
+                    
+                    // 1: wyszukajAutora(...)
+                    vector<Autor*> znalezieniAutorzy = admin.wyszukajAutora(imA, nazA);
+                    
+                    if (znalezieniAutorzy.empty()) {
+                        cout << "Blad: Nie znaleziono takiego autora! Dodaj go najpierw uzywajac opcji nr 3.\n";
+                    } else {
+                        string tytul, gatunek;
+                        cout << "Podaj tytul (bez spacji): "; cin >> tytul;
+                        cout << "Podaj gatunek: "; cin >> gatunek;
+                        
+                        // 2: dodajKsiazke(...) wywolane na znalezionym obiekcie Autora
+                        znalezieniAutorzy[0]->dodajKsiazke(tytul, gatunek);
+                    }
+                }
+                else if (opcjaBib == 3) {
                     string imA, nazA;
                     cout << "Podaj imie autora: "; cin >> imA;
                     cout << "Podaj nazwisko autora: "; cin >> nazA;
                     
                     admin.dodajAutora(imA, nazA);
-                    cout << "Sukces: Dodano autora.\n";
+                    cout << "Sukces: Dodano autora do bazy.\n";
                 }
-                else if (opcjaBib == 3) {
+                else if (opcjaBib == 4) {
                     string fraza;
                     cout << "Podaj szukana fraze (tytul/nazwisko autora/gatunek): "; 
                     cin >> fraza;
@@ -84,10 +106,10 @@ int main() {
                              << " | Gatunek: " << k->getGatunek() << "\n";
                     }
                 }
-                else if (opcjaBib == 4) {
+                else if (opcjaBib == 5) {
                     int numer;
                     cout << "Podaj numer fizycznego egzemplarza do zwrotu: "; 
-                    numer = wczytajLiczbe(); // Uzycie bezpiecznej funkcji!
+                    numer = wczytajLiczbe();
                     
                     admin.przyjmijKsiazke(numer);
                 }
@@ -95,7 +117,7 @@ int main() {
                     cout << "Nieznana opcja. Wybierz ponownie.\n";
                 }
             }
-        } 
+        }
         else if (rola == 2) {
             int opcjaCzyt = -1;
             while (opcjaCzyt != 0) {
