@@ -11,6 +11,8 @@ private:
     std::string nazwisko;
     int stanowisko;
     std::string haslo;
+    bool sprawdzMail(std::string mail); 
+
 public:
     Bibliotekarz(std::string imie, std::string nazwisko, int stanowisko);
     void rejestrujCzytelnika(std::string imie, std::string nazwisko, std::string mail, std::string haslo, int limit);
