@@ -2,6 +2,7 @@
 #include "Czytelnik.h"
 #include "Autor.h"
 #include "Wypozyczenie.h"
+#include "Ksiazka.h"
 #include "Egzemplarz.h"
 #include <iostream>
 
@@ -62,7 +63,8 @@ int Bibliotekarz::getStanowisko() { return stanowisko; }
 string Bibliotekarz::getHaslo() { return haslo; }
 // Symulacja globalnej bazy do ktorej Bibliotekarz ma dostep
 vector<Wypozyczenie*> bazaWypozyczen; 
-
+// Globalna baza ksiazek dla systemu
+vector<Ksiazka*> bazaKsiazek;
 // 1: przyjmijKsiazke(numer : int)
 void Bibliotekarz::przyjmijKsiazke(int numer) {
     Wypozyczenie* znalezione = nullptr;
@@ -97,4 +99,25 @@ void Bibliotekarz::przyjmijKsiazke(int numer) {
     } else {
         cout << "Blad: Brak aktywnego wypozyczenia dla numeru " << numer << endl;
     }
+}
+// Odwzorowanie logiki wyszukiwania z diagramu sekwencji
+vector<Ksiazka*> Bibliotekarz::wyszukajKsiazke(string fraza) {
+    vector<Ksiazka*> wyniki;
+
+    // Realizacja petli [loop: dopoki nie wybrano tytulu] po calej bazie
+    for (Ksiazka* k : bazaKsiazek) {
+
+        // Blok [alt] z diagramu
+        if (k->getTytul() == fraza) {                  // [znamy tytul]
+            wyniki.push_back(k);
+        } 
+        else if (k->getAutor()->getNazwisko() == fraza) { // [znamy autora]
+            wyniki.push_back(k);
+        } 
+        else if (k->getGatunek() == fraza) {           // [znamy gatunek]
+            wyniki.push_back(k);
+        }
+    }
+
+    return wyniki; // Wiadomosc powrotna 1.5.1.3: wynikWyszukiwania()
 }
