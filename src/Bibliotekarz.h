@@ -22,5 +22,6 @@ public:
     std::string getNazwisko();
     int getStanowisko();
     std::string getHaslo();
+    void przyjmijKsiazke(int numer);
 };
 #endif

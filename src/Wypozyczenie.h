@@ -20,5 +20,6 @@ public:
     Egzemplarz* getEgzemplarz();
     Czytelnik* getCzytelnik();
     int getStatus();
+    bool sprawdzTermin();
 };
 #endif

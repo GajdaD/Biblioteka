@@ -31,6 +31,7 @@ enable_testing()
 add_executable(BibliotekaTests 
     tests/test_autor.cpp
     tests/test_bibliotekarz.cpp
+    tests/test_zwrot.cpp
     src/Autor.cpp
     src/Ksiazka.cpp
     src/Czytelnik.cpp

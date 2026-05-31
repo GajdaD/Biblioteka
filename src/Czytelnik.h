@@ -26,5 +26,6 @@ public:
     std::string getHaslo();
     int getLimit();
     double getSumaOplatKarnych();
+    void naliczOplate(double kwota);
 };
 #endif
