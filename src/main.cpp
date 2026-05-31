@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include "Bibliotekarz.h"
+#include "Wypozyczenie.h"
 
 using namespace std;
 

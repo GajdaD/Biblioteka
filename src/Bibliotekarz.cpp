@@ -1,6 +1,8 @@
 #include "Bibliotekarz.h"
 #include "Czytelnik.h"
 #include "Autor.h"
+#include "Wypozyczenie.h"
+#include "Egzemplarz.h"
 #include <iostream>
 
 using namespace std;
@@ -58,3 +60,41 @@ string Bibliotekarz::getImie() { return imie; }
 string Bibliotekarz::getNazwisko() { return nazwisko; }
 int Bibliotekarz::getStanowisko() { return stanowisko; }
 string Bibliotekarz::getHaslo() { return haslo; }
+// Symulacja globalnej bazy do ktorej Bibliotekarz ma dostep
+vector<Wypozyczenie*> bazaWypozyczen; 
+
+// 1: przyjmijKsiazke(numer : int)
+void Bibliotekarz::przyjmijKsiazke(int numer) {
+    Wypozyczenie* znalezione = nullptr;
+    for (auto w : bazaWypozyczen) {
+        if (w->getEgzemplarz()->getNumer() == numer) {
+            znalezione = w;
+            break;
+        }
+    }
+
+    if (znalezione != nullptr) {
+        // 1.1: sprawdzTermin()
+        bool terminUplynal = znalezione->sprawdzTermin();
+
+        // Blok opt [termin uplynal]
+        if (terminUplynal) {
+            // 1.2: wartoscOplaty() - przypisujemy stala kwote dla uproszczenia
+            double kwotaKary = 10.0; 
+            // 1.3: naliczOplate() do obiektu czytelnika
+            znalezione->getCzytelnik()->naliczOplate(kwotaKary);
+            cout << "Naliczono oplate karna: " << kwotaKary << " PLN." << endl;
+        }
+
+        // 1.4: zmienStatus(status : int) na egzemplarzu
+        znalezione->getEgzemplarz()->zmienStatus(1);
+
+        // 1.5: zwrocWypozyczenie()
+        znalezione->zwrocWypozyczenie();
+
+        // 1.6: potwierdzenieZwrotu() - wiadomosc zwrotna
+        cout << "potwierdzenieZwrotu(): Ksiazka o numerze " << numer << " zostala poprawnie zwrocona." << endl;
+    } else {
+        cout << "Blad: Brak aktywnego wypozyczenia dla numeru " << numer << endl;
+    }
+}

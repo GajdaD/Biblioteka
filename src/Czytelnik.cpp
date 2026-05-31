@@ -11,3 +11,6 @@ std::string Czytelnik::getMail() { return mail; }
 std::string Czytelnik::getHaslo() { return haslo; }
 int Czytelnik::getLimit() { return limit; }
 double Czytelnik::getSumaOplatKarnych() { return sumaOplatKarnych; }
+void Czytelnik::naliczOplate(double kwota) {
+    sumaOplatKarnych += kwota;
+}
