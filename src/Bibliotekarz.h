@@ -4,6 +4,7 @@
 #include <vector>
 
 class Autor;
+class Ksiazka;
 
 class Bibliotekarz {
 private:
@@ -23,5 +24,6 @@ public:
     int getStanowisko();
     std::string getHaslo();
     void przyjmijKsiazke(int numer);
+    std::vector<Ksiazka*> wyszukajKsiazke(std::string fraza);
 };
 #endif

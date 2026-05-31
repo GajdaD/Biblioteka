@@ -32,6 +32,7 @@ add_executable(BibliotekaTests
     tests/test_autor.cpp
     tests/test_bibliotekarz.cpp
     tests/test_zwrot.cpp
+    tests/test_wyszukiwanie.cpp
     src/Autor.cpp
     src/Ksiazka.cpp
     src/Czytelnik.cpp
