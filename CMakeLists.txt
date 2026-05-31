@@ -30,6 +30,7 @@ add_executable(BibliotekaApp
 enable_testing()
 add_executable(BibliotekaTests 
     tests/test_autor.cpp
+    tests/test_bibliotekarz.cpp
     src/Autor.cpp
     src/Ksiazka.cpp
     src/Czytelnik.cpp
