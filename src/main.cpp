@@ -52,6 +52,7 @@ int main() {
                 cout << "3. Dodaj nowego autora do systemu\n";
                 cout << "4. Wyszukaj ksiazke\n";
                 cout << "5. Przyjmij zwrot ksiazki\n";
+                cout << "6. Dodaj egzemplarz do ksiazki\n";
                 cout << "0. Wyloguj (Powrot do glownego menu)\n";
                 cout << "Wybierz akcje: ";
                 opcjaBib = wczytajLiczbe();
@@ -113,6 +114,21 @@ int main() {
                     numer = wczytajLiczbe();
 
                     admin.przyjmijKsiazke(numer);
+                }
+                else if (opcjaBib == 6) {
+                    string fraza, lokalizacja;
+                    int numer;
+                    cout << "Podaj tytul ksiazki: "; cin >> fraza;
+
+                    vector<Ksiazka*> wyniki = admin.wyszukajKsiazke(fraza);
+                    if (wyniki.empty()) {
+                        cout << "Blad: Nie znaleziono ksiazki.\n";
+                    } else {
+                        cout << "Znaleziono: " << wyniki[0]->getTytul() << "\n";
+                        cout << "Podaj fizyczny numer egzemplarza: "; numer = wczytajLiczbe();
+                        cout << "Podaj lokalizacje (np. A1): "; cin >> lokalizacja;
+                        wyniki[0]->dodajEgzemplarz(numer, lokalizacja);
+                    }
                 }
                 else if (opcjaBib != 0) {
                     cout << "Nieznana opcja. Wybierz ponownie.\n";
