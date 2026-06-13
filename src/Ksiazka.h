@@ -12,6 +12,8 @@ private:
     std::string tytul;
     Autor* autor;
     std::string gatunek;
+    std::vector<Egzemplarz*> egzemplarze;
+    std::vector<Ocena*> oceny;
 public:
     Ksiazka(std::string tytul, Autor* autor, std::string gatunek);
     std::vector<Ocena*> sprawdzOceny();
