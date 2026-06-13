@@ -30,7 +30,7 @@ void Bibliotekarz::rejestrujCzytelnika(string imie, string nazwisko, string mail
     if (!sprawdzMail(mail)) { 
         // [mail nie istnieje w bazie]
         // 1.2: <<create>> Czytelnik(...)
-        Czytelnik* nowyCzytelnik = new Czytelnik(imie, nazwisko, mail);
+        Czytelnik* nowyCzytelnik = new Czytelnik(imie, nazwisko, mail, haslo, limit);
         zajeteMaile.push_back(mail); // Zapis do lokalnej bazy
 
         // 2: potwierdzenieRejestracji()
@@ -111,7 +111,7 @@ vector<Ksiazka*> Bibliotekarz::wyszukajKsiazke(string fraza) {
         if (k->getTytul() == fraza) {                  // [znamy tytul]
             wyniki.push_back(k);
         } 
-        else if (k->getAutor()->getNazwisko() == fraza) { // [znamy autora]
+        else if (k->getAutor() != nullptr && k->getAutor()->getNazwisko() == fraza) { // [znamy autora]
             wyniki.push_back(k);
         } 
         else if (k->getGatunek() == fraza) {           // [znamy gatunek]
