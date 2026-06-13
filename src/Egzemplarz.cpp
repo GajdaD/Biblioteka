@@ -1,5 +1,5 @@
 #include "Egzemplarz.h"
-Egzemplarz::Egzemplarz(Ksiazka* ksiazka, std::string lokalizacja, int numer) : ksiazka(ksiazka), lokalizacja(lokalizacja), numer(numer) {}
+Egzemplarz::Egzemplarz(Ksiazka* ksiazka, std::string lokalizacja, int numer) : ksiazka(ksiazka), lokalizacja(lokalizacja), numer(numer), status(1) {}
 void Egzemplarz::zmienStatus(int s) {
     status = s;
 }
