@@ -5,6 +5,7 @@
 #include "Bibliotekarz.h"
 #include "Czytelnik.h"
 #include "Autor.h"
+#include "Egzemplarz.h"
 #include "Ksiazka.h"
 #include "Wypozyczenie.h"
 
@@ -102,7 +103,7 @@ int main() {
                     cout << "Znaleziono " << wyniki.size() << " pozycyj.\n";
                     for(auto k : wyniki) {
                         cout << "- Tytul: " << k->getTytul() 
-                             << " | Autor: " << k->getAutor()->getNazwisko() 
+                             << " | Autor: " << (k->getAutor() != nullptr ? k->getAutor()->getNazwisko() : "brak")
                              << " | Gatunek: " << k->getGatunek() << "\n";
                     }
                 }
@@ -123,15 +124,61 @@ int main() {
             while (opcjaCzyt != 0) {
                 cout << "\n--- MENU CZYTELNIKA (" << domyslnyCzytelnik.getMail() << ") ---\n";
                 cout << "1. Wyszukaj ksiazke\n";
-                cout << "2. Zarezerwuj egzemplarz\n";
-                cout << "3. Wypozycz ksiazke\n";
+                cout << "2. Przegladaj dostepne ksiazki\n";
+                cout << "3. Zarezerwuj pierwszy dostepny egzemplarz\n";
+                cout << "4. Wypozycz pierwszy dostepny egzemplarz\n";
+                cout << "5. Sprawdz zalegle oplaty\n";
+                cout << "6. Zaplac oplaty karne\n";
                 cout << "0. Wyloguj (Powrot do glownego menu)\n";
                 cout << "Wybierz akcje: ";
                 opcjaCzyt = wczytajLiczbe(); // Uzycie bezpiecznej funkcji!
 
-                if (opcjaCzyt >= 1 && opcjaCzyt <= 3) {
-                    cout << "\n[INFORMACJA DLA ZESPOLU: Ta sekcja to zadanie dla Osoby nr 2 i 3.]\n";
-                    cout << "[Nalezy tutaj podpiac metody klasy Czytelnik po ich implementacji w TDD.]\n";
+                if (opcjaCzyt == 1) {
+                    string fraza;
+                    cout << "Podaj szukana fraze (tytul/nazwisko autora/gatunek): ";
+                    cin >> fraza;
+
+                    vector<Ksiazka*> wyniki = domyslnyCzytelnik.wyszukajKsiazke(fraza);
+                    cout << "--- WYNIKI WYSZUKIWANIA ---\n";
+                    cout << "Znaleziono " << wyniki.size() << " pozycyj.\n";
+                    for (auto k : wyniki) {
+                        cout << "- Tytul: " << k->getTytul()
+                             << " | Autor: " << (k->getAutor() != nullptr ? k->getAutor()->getNazwisko() : "brak")
+                             << " | Gatunek: " << k->getGatunek() << "\n";
+                    }
+                } else if (opcjaCzyt == 2) {
+                    vector<Ksiazka*> dostepne = domyslnyCzytelnik.przegladajDostepneKsiazki();
+                    cout << "--- DOSTEPNE KSIAZKI ---\n";
+                    cout << "Znaleziono " << dostepne.size() << " pozycyj.\n";
+                    for (auto k : dostepne) {
+                        cout << "- Tytul: " << k->getTytul()
+                             << " | Wolny egzemplarz nr: " << k->wolnyEgzemplarz()->getNumer() << "\n";
+                    }
+                } else if (opcjaCzyt == 3 || opcjaCzyt == 4) {
+                    string fraza;
+                    cout << "Podaj tytul/nazwisko/gatunek ksiazki: ";
+                    cin >> fraza;
+
+                    vector<Ksiazka*> wyniki = domyslnyCzytelnik.wyszukajKsiazke(fraza);
+                    Ksiazka* wybrana = nullptr;
+                    for (auto k : wyniki) {
+                        if (k->wolnyEgzemplarz() != nullptr) {
+                            wybrana = k;
+                            break;
+                        }
+                    }
+
+                    if (wybrana == nullptr) {
+                        cout << "Brak dostepnego egzemplarza dla podanej frazy.\n";
+                    } else if (opcjaCzyt == 3) {
+                        domyslnyCzytelnik.zarezerwujEgzemplarz(wybrana->wolnyEgzemplarz(), "2026-06-13", "2026-06-20");
+                    } else {
+                        domyslnyCzytelnik.wypozyczEgzemplarz(wybrana->wolnyEgzemplarz(), "2026-06-13", "2026-07-13");
+                    }
+                } else if (opcjaCzyt == 5) {
+                    cout << "Suma zaleglych oplat: " << domyslnyCzytelnik.sprawdzSumeOplat() << " PLN\n";
+                } else if (opcjaCzyt == 6) {
+                    domyslnyCzytelnik.zaplacOplateKarna();
                 } else if (opcjaCzyt != 0) {
                     cout << "Nieznana opcja. Wybierz ponownie.\n";
                 }
