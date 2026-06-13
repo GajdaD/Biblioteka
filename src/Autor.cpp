@@ -13,6 +13,8 @@ Autor::Autor(string imie, string nazwisko) : imie(imie), nazwisko(nazwisko) {}
 void Autor::dodajKsiazke(string tytul, string gatunek) {
     // Konstruktor <<create>> Ksiazka z wskaźnikiem na aktualnego Autora (this)
     Ksiazka* nowaKsiazka = new Ksiazka(tytul, this, gatunek);
+    static int kolejnyNumerEgzemplarza = 1000;
+    nowaKsiazka->dodajEgzemplarz(kolejnyNumerEgzemplarza++, "Regal glowny");
     
     // Zapis do naszej symulowanej bazy danych
     bazaKsiazek.push_back(nowaKsiazka);
