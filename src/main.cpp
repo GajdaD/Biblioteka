@@ -28,9 +28,9 @@ int main() {
     // Inicjalizacja "sztywnych" danych poczatkowych (Mock database)
     Bibliotekarz admin("Jan", "Kowalski", 1);
     Czytelnik domyslnyCzytelnik("Adam", "Nowak", "adam@mail.com");
-    
+
     int rola = 0;
-    
+
     while (rola != 3) {
         cout << "\n==========================================\n";
         cout << "       SYSTEM BIBLIOTECZNY (V.1.0)        \n";
@@ -60,26 +60,26 @@ int main() {
                     cout << "Podaj imie: "; cin >> im;
                     cout << "Podaj nazwisko: "; cin >> naz;
                     cout << "Podaj e-mail: "; cin >> mail;
-                    
+
                     admin.rejestrujCzytelnika(im, naz, mail, "haslo123", 3);
-                } 
+                }
                 else if (opcjaBib == 2) {
                     // IMPLEMENTACJA ZGODNA Z DIAGRAMEM SEKWENCJI: "rejestracja nowej ksiazki"
                     cout << "\n[Rejestracja Ksiazki] Najpierw musimy znalezc autora.\n";
                     string imA, nazA;
                     cout << "Podaj imie autora: "; cin >> imA;
                     cout << "Podaj nazwisko autora: "; cin >> nazA;
-                    
+
                     // 1: wyszukajAutora(...)
                     vector<Autor*> znalezieniAutorzy = admin.wyszukajAutora(imA, nazA);
-                    
+
                     if (znalezieniAutorzy.empty()) {
                         cout << "Blad: Nie znaleziono takiego autora! Dodaj go najpierw uzywajac opcji nr 3.\n";
                     } else {
                         string tytul, gatunek;
                         cout << "Podaj tytul (bez spacji): "; cin >> tytul;
                         cout << "Podaj gatunek: "; cin >> gatunek;
-                        
+
                         // 2: dodajKsiazke(...) wywolane na znalezionym obiekcie Autora
                         znalezieniAutorzy[0]->dodajKsiazke(tytul, gatunek);
                     }
@@ -88,29 +88,29 @@ int main() {
                     string imA, nazA;
                     cout << "Podaj imie autora: "; cin >> imA;
                     cout << "Podaj nazwisko autora: "; cin >> nazA;
-                    
+
                     admin.dodajAutora(imA, nazA);
                     cout << "Sukces: Dodano autora do bazy.\n";
                 }
                 else if (opcjaBib == 4) {
                     string fraza;
-                    cout << "Podaj szukana fraze (tytul/nazwisko autora/gatunek): "; 
+                    cout << "Podaj szukana fraze (tytul/nazwisko autora/gatunek): ";
                     cin >> fraza;
-                    
+
                     vector<Ksiazka*> wyniki = admin.wyszukajKsiazke(fraza);
                     cout << "--- WYNIKI WYSZUKIWANIA ---\n";
                     cout << "Znaleziono " << wyniki.size() << " pozycyj.\n";
                     for(auto k : wyniki) {
-                        cout << "- Tytul: " << k->getTytul() 
-                             << " | Autor: " << k->getAutor()->getNazwisko() 
+                        cout << "- Tytul: " << k->getTytul()
+                             << " | Autor: " << (k->getAutor() != nullptr ? k->getAutor()->getNazwisko() : "brak")
                              << " | Gatunek: " << k->getGatunek() << "\n";
                     }
                 }
                 else if (opcjaBib == 5) {
                     int numer;
-                    cout << "Podaj numer fizycznego egzemplarza do zwrotu: "; 
+                    cout << "Podaj numer fizycznego egzemplarza do zwrotu: ";
                     numer = wczytajLiczbe();
-                    
+
                     admin.przyjmijKsiazke(numer);
                 }
                 else if (opcjaBib != 0) {
@@ -123,15 +123,61 @@ int main() {
             while (opcjaCzyt != 0) {
                 cout << "\n--- MENU CZYTELNIKA (" << domyslnyCzytelnik.getMail() << ") ---\n";
                 cout << "1. Wyszukaj ksiazke\n";
-                cout << "2. Zarezerwuj egzemplarz\n";
-                cout << "3. Wypozycz ksiazke\n";
+                cout << "2. Przegladaj dostepne ksiazki\n";
+                cout << "3. Zarezerwuj pierwszy dostepny egzemplarz\n";
+                cout << "4. Wypozycz pierwszy dostepny egzemplarz\n";
+                cout << "5. Sprawdz zalegle oplaty\n";
+                cout << "6. Zaplac oplaty karne\n";
                 cout << "0. Wyloguj (Powrot do glownego menu)\n";
                 cout << "Wybierz akcje: ";
                 opcjaCzyt = wczytajLiczbe(); // Uzycie bezpiecznej funkcji!
 
-                if (opcjaCzyt >= 1 && opcjaCzyt <= 3) {
-                    cout << "\n[INFORMACJA DLA ZESPOLU: Ta sekcja to zadanie dla Osoby nr 2 i 3.]\n";
-                    cout << "[Nalezy tutaj podpiac metody klasy Czytelnik po ich implementacji w TDD.]\n";
+                if (opcjaCzyt == 1) {
+                    string fraza;
+                    cout << "Podaj szukana fraze (tytul/nazwisko autora/gatunek): ";
+                    cin >> fraza;
+
+                    vector<Ksiazka*> wyniki = domyslnyCzytelnik.wyszukajKsiazke(fraza);
+                    cout << "--- WYNIKI WYSZUKIWANIA ---\n";
+                    cout << "Znaleziono " << wyniki.size() << " pozycyj.\n";
+                    for (auto k : wyniki) {
+                        cout << "- Tytul: " << k->getTytul()
+                             << " | Autor: " << (k->getAutor() != nullptr ? k->getAutor()->getNazwisko() : "brak")
+                             << " | Gatunek: " << k->getGatunek() << "\n";
+                    }
+                } else if (opcjaCzyt == 2) {
+                    vector<Ksiazka*> dostepne = domyslnyCzytelnik.przegladajDostepneKsiazki();
+                    cout << "--- DOSTEPNE KSIAZKI ---\n";
+                    cout << "Znaleziono " << dostepne.size() << " pozycyj.\n";
+                    for (auto k : dostepne) {
+                        cout << "- Tytul: " << k->getTytul()
+                             << " | Wolny egzemplarz nr: " << k->wolnyEgzemplarz()->getNumer() << "\n";
+                    }
+                } else if (opcjaCzyt == 3 || opcjaCzyt == 4) {
+                    string fraza;
+                    cout << "Podaj tytul/nazwisko/gatunek ksiazki: ";
+                    cin >> fraza;
+
+                    vector<Ksiazka*> wyniki = domyslnyCzytelnik.wyszukajKsiazke(fraza);
+                    Ksiazka* wybrana = nullptr;
+                    for (auto k : wyniki) {
+                        if (k->wolnyEgzemplarz() != nullptr) {
+                            wybrana = k;
+                            break;
+                        }
+                    }
+
+                    if (wybrana == nullptr) {
+                        cout << "Brak dostepnego egzemplarza dla podanej frazy.\n";
+                    } else if (opcjaCzyt == 3) {
+                        domyslnyCzytelnik.zarezerwujEgzemplarz(wybrana->wolnyEgzemplarz(), "2026-06-13", "2026-06-20");
+                    } else {
+                        domyslnyCzytelnik.wypozyczEgzemplarz(wybrana->wolnyEgzemplarz(), "2026-06-13", "2026-07-13");
+                    }
+                } else if (opcjaCzyt == 5) {
+                    cout << "Suma zaleglych oplat: " << domyslnyCzytelnik.sprawdzSumeOplat() << " PLN\n";
+                } else if (opcjaCzyt == 6) {
+                    domyslnyCzytelnik.zaplacOplateKarna();
                 } else if (opcjaCzyt != 0) {
                     cout << "Nieznana opcja. Wybierz ponownie.\n";
                 }
