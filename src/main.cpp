@@ -5,6 +5,7 @@
 #include "Bibliotekarz.h"
 #include "Czytelnik.h"
 #include "Autor.h"
+#include "Egzemplarz.h"
 #include "Ksiazka.h"
 #include "Wypozyczenie.h"
 
