@@ -1,7 +1,11 @@
 #include "Wypozyczenie.h"
+#include "Egzemplarz.h"
 Wypozyczenie::Wypozyczenie(std::string od_date, std::string do_date, Egzemplarz* egzemplarz, Czytelnik* czytelnik, int status) : od_date(od_date), do_date(do_date), egzemplarz(egzemplarz), czytelnik(czytelnik), status(status) {}
 void Wypozyczenie::zwrocWypozyczenie() {
     status = 0; // 0 oznacza archiwalne/zwrocone
+    if (egzemplarz != nullptr) {
+        egzemplarz->zmienStatus(1);
+    }
 }
 std::string Wypozyczenie::getOd() { return od_date; }
 std::string Wypozyczenie::getDo() { return do_date; }
